@@ -1,3 +1,7 @@
+2011-02-05 Farid Zakaria
+	1. Moved this extension to Github
+		https://github.com/fzakaria/HypeMachine-Extension
+
 2010-12-24 Farid Zakaria
 	1. Created HypeExtension
 
