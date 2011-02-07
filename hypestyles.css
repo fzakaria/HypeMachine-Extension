@@ -1,0 +1,29 @@
+.section .same-post .tools
+{
+	width:300px;
+}
+.section .tools
+{
+	width:300px;
+}
+img.cext
+{
+	border: 0px;
+	color: white;
+	font-size: 1px;
+	height: 25px;
+	overflow: hidden;
+	position: relative;
+	text-indent: -1000px;
+	width: 25px;
+	top:-3px;
+	left: 5px;
+}
+li.cext
+{
+	float:right;
+}
+#content-left .section h3, #content-left #previous mentions .section h3
+{
+	padding-right:150px;
+}

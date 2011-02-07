@@ -1,0 +1,11 @@
+2010-12-24 Farid Zakaria
+	1. Created HypeExtension
+
+2010-12-28 Farid Zakaria
+	2. Added HypeExtension to repository
+
+
+
+TO DO:
+	1. Rollover effect
+	2. Rerun script on page changes
