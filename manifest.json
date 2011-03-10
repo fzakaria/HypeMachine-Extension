@@ -13,7 +13,7 @@
   {
 	"matches": ["http://hypem.com/*", "https://hypem.com/*"], 
 	"css": ["hypestyles.css"],
-	"js": ["jquery-1.4.2.js", "extension.js"],
+	"js": ["extension.js"],
 	"run_at": "document_idle"
   }
   ]
