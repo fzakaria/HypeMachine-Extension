@@ -1,3 +1,7 @@
+2011-03-11 Tony
+	1. Fixed script to allow playback during browsing
+	2. Removed Jquery load
+
 2011-02-05 Farid Zakaria
 	1. Moved this extension to Github
 		https://github.com/fzakaria/HypeMachine-Extension
@@ -12,4 +16,3 @@
 
 TO DO:
 	1. Rollover effect
-	2. Rerun script on page changes
