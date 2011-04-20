@@ -1,3 +1,7 @@
+2011-04-19 Fernando Gonzalez
+	1. Replaced DL button with CSS sprite
+	2. Improved link injection speed
+
 2011-03-11 Tony
 	1. Fixed script to allow playback during browsing
 	2. Removed Jquery load
@@ -15,4 +19,4 @@
 
 
 TO DO:
-	1. Rollover effect
+	1. Rollover effect [Done]

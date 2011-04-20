@@ -14,7 +14,7 @@
 	"matches": ["http://hypem.com/*", "https://hypem.com/*"], 
 	"css": ["hypestyles.css"],
 	"js": ["extension.js"],
-	"run_at": "document_idle"
+	"run_at": "document_end"
   }
   ]
 }

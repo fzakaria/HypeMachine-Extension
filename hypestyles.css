@@ -2,28 +2,51 @@
 {
 	width:300px;
 }
+
 .section .tools
 {
 	width:300px;
 }
-img.cext
+
+li.dl
 {
-	border: 0px;
-	color: white;
-	font-size: 1px;
-	height: 25px;
-	overflow: hidden;
-	position: relative;
-	text-indent: -1000px;
-	width: 25px;
-	top:-3px;
-	left: 5px;
+	float: right;
 }
-li.cext
-{
-	float:right;
-}
+
 #content-left .section h3, #content-left #previous mentions .section h3
 {
 	padding-right:150px;
+}
+
+.spacer {
+	width: 27px; 
+	margin-top: -1px;
+}
+
+.arrow {
+	border-spacing: 0px;
+	float: right;
+}
+
+.arrow:hover .rect{
+	background: #0063DC;
+}
+
+.arrow:hover .tri{
+	border-top: 10px solid #0063DC;
+}
+
+.rect {
+	background: #494949;
+	width: 8px;
+	height: 10px;
+	margin-left: 5px;
+}
+
+.tri{	
+	width: 0;
+	height: 0;	
+	border-left: 9px solid transparent;	
+	border-right: 9px solid transparent;	
+	border-top: 10px solid #494949;
 }
