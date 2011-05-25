@@ -28,22 +28,22 @@ li.dl
 	float: right;
 }
 
-.arrow:hover .rect{
+.arrow:hover .rect-arrow{
 	background: #0063DC;
 }
 
-.arrow:hover .tri{
+.arrow:hover .tri-arrow{
 	border-top: 10px solid #0063DC;
 }
 
-.rect {
+.rect-arrow {
 	background: #494949;
 	width: 8px;
 	height: 10px;
 	margin-left: 5px;
 }
 
-.tri{	
+.tri-arrow{	
 	width: 0;
 	height: 0;	
 	border-left: 9px solid transparent;	

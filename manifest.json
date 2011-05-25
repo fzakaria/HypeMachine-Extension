@@ -1,6 +1,6 @@
  {
   "name": "HypeMachine Extension",
-  "version": "1.4",
+  "version": "1.41",
   "description": "Adds a download button to the HypeMachine page, making downloading songs simpler.",
   "background_page": "background.html",
   "homepage_url": "http://fzakaria.com",

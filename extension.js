@@ -4,6 +4,7 @@ var stylesheetUrl = chrome.extension.getURL("hypestyles.css");
 
 // This is all the JS that will be injected in the document body
 var main = function() {
+
 	// Adds a download button next to each track
 	var buttonScript = function() {
 		// Wait for the tracks script to load
@@ -17,7 +18,8 @@ var main = function() {
 				$$('ul.tools').each(function(track, index) {
 					var songUrl = "/serve/play/"+tracks[index].id+"/";
 					songUrl += tracks[index].key;
-					track.insertAdjacentHTML("AfterBegin", '<li class="dl"><table class="spacer"></table><a href="'+songUrl+'"><table class="arrow"><tr></td><td><div class="rect"></div></td></td></tr><tr><td class="tri"></td></tr></table></a></li>');
+					songUrl += ".mp3";
+					track.insertAdjacentHTML("AfterBegin", '<li class="dl"><table class="spacer"></table><a href="'+songUrl+'"><table class="arrow"><tr><td><div class="rect-arrow"></div></td></tr><tr><td class="tri-arrow"></td></tr></table></a></li>');
 					});
 			}		
 		}
@@ -30,12 +32,24 @@ var main = function() {
 	Ajax.Responders.register({
 		onComplete: buttonScript
 	});
+
 };
+
+var overrideFunction = function enable_playback_check()
+	{
+		console.debug("Overriden playback check");
+	}
 
 // Lets create the script objects
 var injectedScript = document.createElement('script');
 injectedScript.type = 'text/javascript';
 injectedScript.text = '('+main+')("");';
+(document.body || document.head).appendChild(injectedScript);
+
+// Lets create the script objects
+injectedScript = document.createElement('script');
+injectedScript.type = 'text/javascript';
+injectedScript.text = ''+overrideFunction+';';
 (document.body || document.head).appendChild(injectedScript);
 
 //Lets create the CSS object. This has to be done this way rather than the manifest.json
