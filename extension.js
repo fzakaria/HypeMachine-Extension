@@ -36,6 +36,7 @@ var main = function() {
     
 	// Adds a download button next to each track
 	var buttonScript = function() {
+		console.debug("Buttons injected.");
 		// Wait for the tracks script to load
 		var tracks = trackList[document.location.href];
 		if (tracks === undefined || tracks.length < 1) {
@@ -43,8 +44,8 @@ var main = function() {
 		} else {
 			// Check if this particular page has been processed
 			// through a previous call
-			if ($$('.dl').length < 1) {
-				$$('ul.tools').each(function(track, index) {
+			if (jQuery('.dl').length < 1) {
+				jQuery('ul.tools').each(function(index, track) {
 					var songUrl = "/serve/play/"+tracks[index].id+"/";
 					songUrl += tracks[index].key;
 					songUrl += ".mp3";
@@ -56,23 +57,16 @@ var main = function() {
 	
 	// Run it right away
 	buttonScript();
-	console.debug("Buttons injected.");
-
-	// Re-display buttons after an Ajax update is complete
-	Ajax.Responders.register({
-		onComplete: buttonScript
-	});
+	
+	jQuery(document).ajaxComplete(function(event,request, settings){
+		buttonScript();
+   });
+	
 
 };
 
-//Let's make sure we always have prototype
-var injectedScript = document.createElement('script');
-injectedScript.type = 'text/javascript';
-injectedScript.src = 'http://ajax.googleapis.com/ajax/libs/prototype/1.7.0.0/prototype.js';
-(document.body || document.head).appendChild(injectedScript);
-
 // Lets create the script objects
-injectedScript = document.createElement('script');
+var injectedScript = document.createElement('script');
 injectedScript.type = 'text/javascript';
 injectedScript.text = '('+main+')("");';
 (document.body || document.head).appendChild(injectedScript);
