@@ -65,11 +65,19 @@ var main = function() {
 
 };
 
-// Lets create the script objects
+//Let's make sure we always have prototype
 var injectedScript = document.createElement('script');
+injectedScript.type = 'text/javascript';
+injectedScript.src = 'http://ajax.googleapis.com/ajax/libs/prototype/1.7.0.0/prototype.js';
+(document.body || document.head).appendChild(injectedScript);
+
+// Lets create the script objects
+injectedScript = document.createElement('script');
 injectedScript.type = 'text/javascript';
 injectedScript.text = '('+main+')("");';
 (document.body || document.head).appendChild(injectedScript);
+
+
 
 
 
