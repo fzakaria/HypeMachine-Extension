@@ -49,7 +49,7 @@ var main = function() {
 					var songUrl = "/serve/play/"+tracks[index].id+"/";
 					songUrl += tracks[index].key;
 					songUrl += ".mp3";
-					track.insertAdjacentHTML("AfterBegin", '<li class="dl"><table class="spacer"></table><a href="'+songUrl+'"><table class="arrow"><tr><td><div class="rect-arrow"></div></td></tr><tr><td class="'+triArrowString+'"></td></tr></table></a></li>');
+					jQuery(track).append('<li class="dl"><table class="spacer"></table><a href="'+songUrl+'"><table class="arrow"><tr><td><div class="rect-arrow"></div></td></tr><tr><td class="'+triArrowString+'"></td></tr></table></a></li>');
 					});
 			}		
 		}
