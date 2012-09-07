@@ -38,7 +38,7 @@ var main = function() {
 	var buttonScript = function() {
 		console.debug("Buttons injected.");
 		// Wait for the tracks script to load
-		var tracks = trackList[document.location.href];
+		var tracks = window.displayList['tracks'];
 		if (tracks === undefined || tracks.length < 1) {
 			setTimeout(buttonScript, 1);
 		} else {
