@@ -46,9 +46,14 @@ var main = function() {
 			// through a previous call
 			if (jQuery('.dl').length < 1) {
 				jQuery('ul.tools').each(function(index, track) {
-					var songUrl = "/serve/play/"+tracks[index].id+"/";
-					songUrl += tracks[index].key;
-					songUrl += ".mp3";
+					// Request the song URL
+					var xmlHttp = null;
+    				xmlHttp = new XMLHttpRequest();
+    				xmlHttp.open("GET", "serve/source/" + tracks[index].id + "/" + tracks[index].key, false);
+    				xmlHttp.send(null);
+    				var response = JSON.parse(xmlHttp.responseText);
+
+					var songUrl = response.url;
 					jQuery(track).prepend('<li class="dl"><table class="spacer"></table><a href="'+songUrl+'"><table class="arrow"><tr><td><div class="rect-arrow"></div></td></tr><tr><td class="'+triArrowString+'"></td></tr></table></a></li>');
 					});
 			}		
