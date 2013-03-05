@@ -39,9 +39,9 @@ var main = function() {
 		console.debug("Buttons injected.");
 		// Wait for the tracks script to load
 		var tracks = window.displayList['tracks'];
-		if (tracks === undefined || tracks.length < 1) {
-			setTimeout(buttonScript, 1);
-		} else {
+		 if (tracks === undefined || tracks.length < 1) {
+		 	setTimeout(buttonScript, 1);
+		 } else {
 			// Check if this particular page has been processed
 			// through a previous call
 			if (jQuery('.dl').length < 1) {
@@ -49,13 +49,18 @@ var main = function() {
 					// Request the song URL
 					var xmlHttp = null;
     				xmlHttp = new XMLHttpRequest();
-    				xmlHttp.open("GET", "serve/source/" + tracks[index].id + "/" + tracks[index].key, false);
-    				xmlHttp.send(null);
-    				var response = JSON.parse(xmlHttp.responseText);
-
-					var songUrl = response.url;
-					jQuery(track).prepend('<li class="dl"><table class="spacer"></table><a href="'+songUrl+'"><table class="arrow"><tr><td><div class="rect-arrow"></div></td></tr><tr><td class="'+triArrowString+'"></td></tr></table></a></li>');
-					});
+    				xmlHttp.onreadystatechange = function() {
+    					if (xmlHttp.readyState==4 && xmlHttp.status == 200 && jQuery(track).data("hasDownloadButton") == false) {
+    						var response = JSON.parse(xmlHttp.responseText);
+    						var songUrl = response.url;
+    						jQuery(track).data("hasDownloadButton", true);
+							jQuery(track).prepend('<li class="dl"><table class="spacer"></table><a href="'+songUrl+'"><table class="arrow"><tr><td><div class="rect-arrow"></div></td></tr><tr><td class="'+triArrowString+'"></td></tr></table></a></li>');
+						}
+    				};
+    				jQuery(track).data("hasDownloadButton", false);
+    				xmlHttp.open("GET", "serve/source/" + tracks[index].id + "/" + tracks[index].key, true);
+    				xmlHttp.send();
+				});
 			}		
 		}
 	};
