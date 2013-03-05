@@ -43,6 +43,10 @@ li.dl
 	margin-left: 5px;
 }
 
+table {
+	border-collapse: separate;
+}
+
 .tri-arrow{	
 	width: 0;
 	height: 0;	
