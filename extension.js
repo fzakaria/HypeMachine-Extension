@@ -44,13 +44,13 @@ var main = function() {
 		 } else {
 			// Check if this particular page has been processed
 			// through a previous call
-			if (jQuery('.dl').length < 1) {
+			if (jQuery('.dl').length < tracks.length) {
 				jQuery('ul.tools').each(function(index, track) {
 					// Request the song URL
 					var xmlHttp = null;
     				xmlHttp = new XMLHttpRequest();
     				xmlHttp.onreadystatechange = function() {
-    					if (xmlHttp.readyState==4 && xmlHttp.status == 200 && jQuery(track).data("hasDownloadButton") == false) {
+    					if (xmlHttp.readyState==4 && xmlHttp.status == 200 && !jQuery(track).data("hasDownloadButton") && jQuery("#section-track-" + tracks[index].id + " .section-player .tools .dl").length == 0) {
     						var response = JSON.parse(xmlHttp.responseText);
     						var songUrl = response.url;
     						jQuery(track).data("hasDownloadButton", true);
@@ -58,7 +58,7 @@ var main = function() {
 						}
     				};
     				jQuery(track).data("hasDownloadButton", false);
-    				xmlHttp.open("GET", "serve/source/" + tracks[index].id + "/" + tracks[index].key, true);
+    				xmlHttp.open("GET", "http://hypem.com/serve/source/" + tracks[index].id + "/" + tracks[index].key, true);
     				xmlHttp.send();
 				});
 			}		
