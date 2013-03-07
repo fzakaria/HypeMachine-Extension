@@ -76,17 +76,13 @@ var main = function() {
 	jQuery('#header, #player-container, #content-wrapper, #footer').off('click','a',handle_click);
 
 	window.handle_click = function (event) {
-		console.log(event);
-		console.log(event.currentTarget.parentNode.className);
 	    log('handle_click(' + event + ') called');
 	    if (event.which == 2 || jQuery(this).prop('target') == "_blank" || jQuery(this).prop('target') == "_top") {
-	    	console.log("stop");
 	        event.stopPropagation();
 	        return true;
 	    }
 	    if (jQuery(this).attr('href')) {
 	        if (jQuery(this).attr('href').charAt(0) === '#') {
-	        	console.log("href");
 	            var offset = jQuery(jQuery(this).attr('href')).offset();
 	            jQuery('html, body').animate({
 	                scrollTop: offset.top,
@@ -101,7 +97,6 @@ var main = function() {
 	        t_elt = event.target || event.srcElement;
 	        if (event.currentTarget.parentNode.className == "dl") {
 	        	// let the shit download
-	        	console.log("yee");
 	        	return true;
 	    	} else if (t_elt.tagName != 'A') {
 	        	console.log("A");
@@ -110,21 +105,16 @@ var main = function() {
 	            }
 	            url = t_elt.href;
 	        } else {
-	        	console.log("URL");
 	            url = t_elt.href;
 	        }
 	        if (url.match(/random$/)) {
-	        	console.log("random");
 	            load_random_track();
 	        } else if (url.match(/random_search$/)) {
-	        	console.log("random_s");
 	            load_random_search();
 	        } else {
-	    		console.log("default");
 	            load_url(url, null, event);
 	            load_user_menu();
 	        }
-	        console.log("false");
 	        return false;
 	    }
 	};
