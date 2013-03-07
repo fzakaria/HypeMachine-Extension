@@ -49,12 +49,12 @@ var main = function() {
 					// Request the song URL
 					var xmlHttp = null;
     				xmlHttp = new XMLHttpRequest();
-    				xmlHttp.onreadystatechange = function() {
-    					if (xmlHttp.readyState==4 && xmlHttp.status == 200 && !jQuery(track).data("hasDownloadButton") && jQuery("#section-track-" + tracks[index].id + " .section-player .tools .dl").length == 0) {
+    				xmlHttp.onreadystatechange = function() { 
+    					if (xmlHttp.readyState == 4 && xmlHttp.status == 200 && !jQuery(track).data("hasDownloadButton") && jQuery("#section-track-" + tracks[index].id + " .section-player .tools .dl").length == 0) {
     						var response = JSON.parse(xmlHttp.responseText);
     						var songUrl = response.url;
     						jQuery(track).data("hasDownloadButton", true);
-							jQuery(track).prepend('<li class="dl"><table class="spacer"></table><a href="'+songUrl+'"><table class="arrow"><tr><td><div class="rect-arrow"></div></td></tr><tr><td class="'+triArrowString+'"></td></tr></table></a></li>');
+							jQuery(track).prepend('<li class="dl"><table class="spacer"></table><a href="'+songUrl+'"' + ' download="' + tracks[index].artist + ' - ' + tracks[index].song + '.mp3"' + '><table class="arrow"><tr><td><div class="rect-arrow"></div></td></tr><tr><td class="'+triArrowString+'"></td></tr></table></a></li>');
 						}
     				};
     				jQuery(track).data("hasDownloadButton", false);
