@@ -39,42 +39,51 @@ var main = function() {
 		console.debug("Buttons injected.");
 		// Wait for the tracks script to load
 		var tracks = window.displayList['tracks'];
-		 if (tracks === undefined || tracks.length < 1) {
+		 
+    if (tracks === undefined || tracks.length < 1) {
 		 	setTimeout(buttonScript, 1);
-		 } else {
+		} 
+    else {
 			// Check if this particular page has been processed
 			// through a previous call
-			if (jQuery('.dl').length < tracks.length) {
+      if (jQuery('.dl').length < tracks.length) {
 				jQuery('ul.tools').each(function(index, track) {
-					// Request the song URL
-					var xmlHttp = null;
-    				xmlHttp = new XMLHttpRequest();
-    				xmlHttp.onreadystatechange = function() { 
-    					if (xmlHttp.readyState == 4 && xmlHttp.status == 200 && !jQuery(track).data("hasDownloadButton") && jQuery("#section-track-" + tracks[index].id + " .section-player .tools .dl").length == 0) {
-    						var response = JSON.parse(xmlHttp.responseText);
-    						var songUrl = response.url;
-    						jQuery(track).data("hasDownloadButton", true);
-							jQuery(track).prepend('<li class="dl"><table class="spacer"></table><a href="'+songUrl+'"' + ' download="' + tracks[index].artist + ' - ' + tracks[index].song + '.mp3"' + '><table class="arrow"><tr><td><div class="rect-arrow"></div></td></tr><tr><td class="'+triArrowString+'"></td></tr></table></a></li>');
-						}
-    				};
-    				jQuery(track).data("hasDownloadButton", false);
-    				xmlHttp.open("GET", "http://hypem.com/serve/source/" + tracks[index].id + "/" + tracks[index].key, true);
-    				xmlHttp.send();
-				});
-			}		
-		}
-	};
+          var song = tracks[index];
+          var title = song.song;
+          var artist = song.artist;
+          var id = song.id;
+          var key = song.key;
+          console.log("index: "+index);
+          var hasDownloadButton = jQuery(track).data("hasDownloadButton");
+          if (typeof(hasDownloadButton) === 'undefined' || !hasDownloadButton){
+            jQuery.getJSON("/serve/source/"+ id + "/" + key, function(data) {
+              var download_url = data.url;
+              jQuery(track).prepend('<li class="dl"><table class="spacer"></table><a target="_top" href="'+download_url+'"' + ' download="' + artist + ' - ' + title + '.mp3"' + '><table class="arrow"><tr><td><div class="rect-arrow"></div></td></tr><tr><td class="'+triArrowString+'"></td></tr></table></a></li>');
+            });
+            jQuery(track).data("hasDownloadButton", true);
+          }
+          
+        });//each		
+      }
+    }
+  };//buttonscript
+  
 	
 	// Run it right away
 	buttonScript();
-	
-	jQuery(document).ajaxComplete(function(event,request, settings){
+  
+  jQuery(document).ajaxComplete(function(event,request, settings){
 		buttonScript();
-   });
-
+  });
+  
+	/*
+  The following code can be used to make the download attribute added in HTML5 work.
+  HypeMachine overrides the handle_click functionality and returns false at the end, disabling the browsers default handling (i.e. downloading).
+  In order to circumvent this, we can either set the target or added the check for our className. 
+  I am keeping this here for future reference!
+  
 	// override hypem's handle_click function
 	jQuery('#header, #player-container, #content-wrapper, #footer').off('click','a',handle_click);
-
 	window.handle_click = function (event) {
 	    log('handle_click(' + event + ') called');
 	    if (event.which == 2 || jQuery(this).prop('target') == "_blank" || jQuery(this).prop('target') == "_top") {
@@ -120,6 +129,7 @@ var main = function() {
 	};
 	// re-bind the event
 	jQuery('#header, #player-container, #content-wrapper, #footer').on('click','a',window.handle_click);
+  */
 };
 
 // Lets create the script objects
@@ -127,8 +137,6 @@ var injectedScript = document.createElement('script');
 injectedScript.type = 'text/javascript';
 injectedScript.text = '('+main+')("");';
 (document.body || document.head).appendChild(injectedScript);
-
-
 
 
 
