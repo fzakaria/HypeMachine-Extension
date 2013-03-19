@@ -1,3 +1,6 @@
+2013-03-22 Farid Zakaria
+	1. Updated to new API according to changes proposed by landerbrandt+github@gmail.com
+
 2011-04-19 Fernando Gonzalez
 	1. Replaced DL button with CSS sprite
 	2. Improved link injection speed
