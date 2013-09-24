@@ -5,6 +5,40 @@ var stylesheetUrl = chrome.extension.getURL("hypestyles.css");
 // This is all the JS that will be injected in the document body
 var main = function() {
 
+  /**
+   * Return outerHTML for the first element in a jQuery object,
+   * or an empty string if the jQuery object is empty;  
+   */
+  jQuery.fn.outerHTML = function() {
+     return (this[0]) ? this[0].outerHTML : '';  
+  };
+  
+   /**
+   * Utility to wrap the different behaviors between W3C-compliant browsers
+   * and IE when adding event handlers.
+   *
+   * @param {Object} element Object on which to attach the event listener.
+   * @param {string} type A string representing the event type to listen for
+   *     (e.g. load, click, etc.).
+   * @param {function()} callback The function that receives the notification.
+   */
+   function addListener(element, type, callback) {
+    if (element.addEventListener) element.addEventListener(type, callback);
+    else if (element.attachEvent) element.attachEvent('on' + type, callback);
+   }
+
+   /***
+   * The name _dlExtGATracker is chosen so as not to conflict with HypeMachine's possible
+   * use of Google Analytics object.
+   */
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+   })(window,document,'script','//www.google-analytics.com/analytics.js','_dlExtGATracker');
+
+   _dlExtGATracker('create', 'UA-44161401-1', 'hypem.com');
+   _dlExtGATracker('send', 'pageview');
+
 	//Random String generator.
     var generator = function()
     {
@@ -36,7 +70,6 @@ var main = function() {
     
 	// Adds a download button next to each track
 	var buttonScript = function() {
-		console.debug("Buttons injected.");
 		// Wait for the tracks script to load
 		var tracks = window.displayList['tracks'];
 		 
@@ -53,12 +86,17 @@ var main = function() {
           var artist = song.artist;
           var id = song.id;
           var key = song.key;
-          console.log("index: "+index);
           var hasDownloadButton = jQuery(track).data("hasDownloadButton");
           if (typeof(hasDownloadButton) === 'undefined' || !hasDownloadButton){
             jQuery.getJSON("/serve/source/"+ id + "/" + key, function(data) {
               var download_url = data.url;
-              jQuery(track).prepend('<li class="dl"><table class="spacer"></table><a target="_top" href="'+download_url+'"' + ' download="' + artist + ' - ' + title + '.mp3"' + '><table class="arrow"><tr><td><div class="rect-arrow"></div></td></tr><tr><td class="'+triArrowString+'"></td></tr></table></a></li>');
+              var download_button = document.createElement("a");
+              download_button.target = "_top";
+              download_button.href = download_url;
+              download_button.className = "DownloadSongButton";
+              download_button.download = artist + ' - ' + title + '.mp3';
+              download_button.innerHTML = '<table class="arrow"><tr><td><div class="rect-arrow"></div></td></tr><tr><td class="'+triArrowString+     '"></td></tr></table>';
+              jQuery(track).prepend('<li class="dl"><table class="spacer"></table>' + jQuery(download_button)[0].outerHTML + '</li>');
             });
             jQuery(track).data("hasDownloadButton", true);
           }
@@ -68,6 +106,11 @@ var main = function() {
     }
   };//buttonscript
   
+  
+  jQuery('ul.tools').on('click', '.DownloadSongButton', function() {
+    console.log( "Downloading - " + jQuery(this)[0].download );
+    _dlExtGATracker('send', 'event', 'download', 'click', 'song-downloads', 1);
+  });
 	
 	// Run it right away
 	buttonScript();
@@ -76,60 +119,6 @@ var main = function() {
 		buttonScript();
   });
   
-	/*
-  The following code can be used to make the download attribute added in HTML5 work.
-  HypeMachine overrides the handle_click functionality and returns false at the end, disabling the browsers default handling (i.e. downloading).
-  In order to circumvent this, we can either set the target or added the check for our className. 
-  I am keeping this here for future reference!
-  
-	// override hypem's handle_click function
-	jQuery('#header, #player-container, #content-wrapper, #footer').off('click','a',handle_click);
-	window.handle_click = function (event) {
-	    log('handle_click(' + event + ') called');
-	    if (event.which == 2 || jQuery(this).prop('target') == "_blank" || jQuery(this).prop('target') == "_top") {
-	        event.stopPropagation();
-	        return true;
-	    }
-	    if (jQuery(this).attr('href')) {
-	        if (jQuery(this).attr('href').charAt(0) === '#') {
-	            var offset = jQuery(jQuery(this).attr('href')).offset();
-	            jQuery('html, body').animate({
-	                scrollTop: offset.top,
-	                scrollLeft: offset.left
-	            });
-	            if (is_html5_history_compat()) {
-	                skip_update_page_contents = 1;
-	                history.replaceState(null, null, document.location.protocol + '//' + document.location.host + document.location.pathname + jQuery(this).attr('href'));
-	            }
-	            return false;
-	        }
-	        t_elt = event.target || event.srcElement;
-	        if (event.currentTarget.parentNode.className == "dl") {
-	        	// let the shit download
-	        	return true;
-	    	} else if (t_elt.tagName != 'A') {
-	        	console.log("A");
-	            while (t_elt.tagName != 'A') {
-	                t_elt = t_elt.parentNode;
-	            }
-	            url = t_elt.href;
-	        } else {
-	            url = t_elt.href;
-	        }
-	        if (url.match(/random$/)) {
-	            load_random_track();
-	        } else if (url.match(/random_search$/)) {
-	            load_random_search();
-	        } else {
-	            load_url(url, null, event);
-	            load_user_menu();
-	        }
-	        return false;
-	    }
-	};
-	// re-bind the event
-	jQuery('#header, #player-container, #content-wrapper, #footer').on('click','a',window.handle_click);
-  */
 };
 
 // Lets create the script objects
@@ -138,8 +127,6 @@ injectedScript.type = 'text/javascript';
 injectedScript.text = '('+main+')("");';
 (document.body || document.head).appendChild(injectedScript);
 
-
-
 //Lets create the CSS object. This has to be done this way rather than the manifest.json
 //because we want to override some of the CSS properties so they must be injected after.
 var injectedCSS = document.createElement('link');
@@ -147,7 +134,3 @@ injectedCSS.type = 'text/css';
 injectedCSS.rel = 'stylesheet';
 injectedCSS.href = stylesheetUrl;
 (document.body || document.head).appendChild(injectedCSS);
-
-//var injectRandomCSS = document.createElement('style');
-//injectRandomCSS = 'text/css';
-//$$('<style type="ext/css">.'+triArrowString+'{ width: 0; height: 0; border-left: 9px solid transparent; border-right: 9px solid transparent;	border-top: 10px solid #494949; }</style>').appendTo("head");

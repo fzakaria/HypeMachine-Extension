@@ -7,10 +7,11 @@
   "background": {
     "page": "background.html"
   },
+  "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
   "homepage_url": "http://fzakaria.com",
   "icons": {
-    "128": "./images/hype.png",
-	"48": "./images/hype48.jpeg"
+    "48": "./images/hype48.jpeg",
+    "128": "./images/hype128.png"
   },
   "permissions": ["tabs", "http://*/", "https://*/"],
   "content_scripts":[
