@@ -12,5 +12,7 @@ It's super easy to install the extension by following these steps:
 
 5- You should now be able to click on the download arrow next to the songs and enjoy them later one !
 
+I'd like to add thanks for everyone who's supported the extension and sent me thank you e-mails.
+
 Cheers,
 Farid Zakaria
