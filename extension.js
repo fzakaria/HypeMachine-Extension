@@ -105,11 +105,37 @@ var main = function() {
       }
     }
   };//buttonscript
+
+  //Helper function get around Chrome Bug
+  //https://code.google.com/p/chromium/issues/detail?id=373182
+  function downloadFile (sUrl, fileName) {
+        window.URL = window.URL || window.webkitURL;
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', sUrl, true);
+        xhr.responseType = 'blob';
+        xhr.onload = function(e) {
+                var res = xhr.response;               
+                 var blob = new Blob([res], {type:"audio/mp3"});
+
+                url = window.URL.createObjectURL(blob);
+                var a = document.createElement("a");
+                document.body.appendChild(a);
+                a.style = "display: none";
+                a.download = fileName;
+                a.href = url;
+                a.click();
+                window.URL.revokeObjectURL(url);
+        };
+        xhr.send();
+}
   
   
   jQuery('ul.tools').on('click', '.DownloadSongButton', function() {
     console.log( "Downloading - " + jQuery(this)[0].download );
+    downloadFile(jQuery(this)[0].href,jQuery(this)[0].download  );
     _dlExtGATracker('send', 'event', 'download', 'click', 'song-downloads', 1);
+    return false;
   });
 	
 	// Run it right away
