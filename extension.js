@@ -109,25 +109,29 @@ var main = function() {
   //Helper function get around Chrome Bug
   //https://code.google.com/p/chromium/issues/detail?id=373182
   function downloadFile (sUrl, fileName) {
-        window.URL = window.URL || window.webkitURL;
-
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', sUrl, true);
-        xhr.responseType = 'blob';
-        xhr.onload = function(e) {
-                var res = xhr.response;               
-                 var blob = new Blob([res], {type:"audio/mp3"});
-
-                url = window.URL.createObjectURL(blob);
-                var a = document.createElement("a");
-                document.body.appendChild(a);
-                a.style = "display: none";
-                a.download = fileName;
-                a.href = url;
-                a.click();
-                window.URL.revokeObjectURL(url);
-        };
-        xhr.send();
+    var xhr = new XMLHttpRequest();
+    xhr.open( "GET", sUrl, true );
+    xhr.responseType = "arraybuffer";
+    xhr.onload = function( e ) {
+      var arrayBufferView = new Uint8Array( this.response );
+      var blob = new Blob( [ arrayBufferView ], { type: "audio/mp3" } );
+      var urlCreator = window.URL || window.webkitURL;
+      var mp3Url = urlCreator.createObjectURL( blob );
+      var link = document.createElement("a");
+      link.href = mp3Url;
+      link.download = fileName;
+      link.style.display = "none";
+      var evt = new MouseEvent("click", {
+          "view": window,
+          "bubbles": true,
+          "cancelable": true
+      });
+      document.body.appendChild(link);
+      link.dispatchEvent(evt);
+      document.body.removeChild(link);
+      console.log("Downloading...");
+  };
+  xhr.send();
 }
   
   
