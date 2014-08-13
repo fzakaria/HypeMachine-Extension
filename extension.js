@@ -105,17 +105,49 @@ var main = function() {
       }
     }
   };//buttonscript
+
+  //Helper function get around Chrome Bug
+  //https://code.google.com/p/chromium/issues/detail?id=373182
+  function downloadFile (sUrl, fileName) {
+    var xhr = new XMLHttpRequest();
+    xhr.open( "GET", sUrl, true );
+    xhr.responseType = "blob";
+    xhr.onload = function( e ) {
+      var res = xhr.response;   
+      var blob = new Blob( [ res ], { type: "audio/mp3" } );
+      var mp3Url = window.URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = mp3Url;
+      a.download = fileName;
+      a.style = "display: none";
+      a.click();
+      window.URL.revokeObjectURL(url);
+  };
+  xhr.send();
+}
+
+  var downloadEvent = function(e) {
+      var downloadAnchor = e.currentTarget
+      console.log( "Downloading - " + downloadAnchor.download );
+      downloadFile(downloadAnchor.href,downloadAnchor.download  );
+      _dlExtGATracker('send', 'event', 'download', 'click', 'song-downloads', 1);
+      return false;
+  }
   
-  
-  jQuery('ul.tools').on('click', '.DownloadSongButton', function() {
-    console.log( "Downloading - " + jQuery(this)[0].download );
-    _dlExtGATracker('send', 'event', 'download', 'click', 'song-downloads', 1);
-  });
+  attachHandler();
+  function attachHandler() {
+      jQuery('.DownloadSongButton').on('click', downloadEvent);
+  }
+  function removeHandler(){
+    jQuery('.DownloadSongButton').off('click', downloadEvent);
+  }
 	
 	// Run it right away
 	buttonScript();
   
   jQuery(document).ajaxComplete(function(event,request, settings){
+    removeHandler();
+    attachHandler();
 		buttonScript();
   });
   
