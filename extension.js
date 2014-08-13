@@ -111,41 +111,43 @@ var main = function() {
   function downloadFile (sUrl, fileName) {
     var xhr = new XMLHttpRequest();
     xhr.open( "GET", sUrl, true );
-    xhr.responseType = "arraybuffer";
+    xhr.responseType = "blob";
     xhr.onload = function( e ) {
-      var arrayBufferView = new Uint8Array( this.response );
-      var blob = new Blob( [ arrayBufferView ], { type: "audio/mp3" } );
-      var urlCreator = window.URL || window.webkitURL;
-      var mp3Url = urlCreator.createObjectURL( blob );
-      var link = document.createElement("a");
-      link.href = mp3Url;
-      link.download = fileName;
-      link.style.display = "none";
-      var evt = new MouseEvent("click", {
-          "view": window,
-          "bubbles": true,
-          "cancelable": true
-      });
-      document.body.appendChild(link);
-      link.dispatchEvent(evt);
-      document.body.removeChild(link);
-      console.log("Downloading...");
+      var res = xhr.response;   
+      var blob = new Blob( [ res ], { type: "audio/mp3" } );
+      var mp3Url = window.URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = mp3Url;
+      a.download = fileName;
+      a.style = "display: none";
+      a.click();
+      window.URL.revokeObjectURL(url);
   };
   xhr.send();
 }
+
+  var downloadEvent = function(e) {
+      var downloadAnchor = e.currentTarget
+      console.log( "Downloading - " + downloadAnchor.download );
+      downloadFile(downloadAnchor.href,downloadAnchor.download  );
+      _dlExtGATracker('send', 'event', 'download', 'click', 'song-downloads', 1);
+      return false;
+  }
   
-  
-  jQuery('ul.tools').on('click', '.DownloadSongButton', function() {
-    console.log( "Downloading - " + jQuery(this)[0].download );
-    downloadFile(jQuery(this)[0].href,jQuery(this)[0].download  );
-    _dlExtGATracker('send', 'event', 'download', 'click', 'song-downloads', 1);
-    return false;
-  });
+  attachHandler();
+  function attachHandler() {
+      jQuery('.DownloadSongButton').on('click', downloadEvent);
+  }
+  function removeHandler(){
+    jQuery('.DownloadSongButton').off('click', downloadEvent);
+  }
 	
 	// Run it right away
 	buttonScript();
   
   jQuery(document).ajaxComplete(function(event,request, settings){
+    removeHandler();
+    attachHandler();
 		buttonScript();
   });
   
