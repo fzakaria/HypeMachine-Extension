@@ -54,3 +54,11 @@ table {
 	border-right: 9px solid transparent;	
 	border-top: 10px solid #494949;
 }
+
+#DownloadAllSongsButton {
+    display: inline-block;
+    background-color: #ffffff;
+    position: relative;
+    left: 15px;
+    top: -10px;
+}

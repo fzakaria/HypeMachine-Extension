@@ -106,6 +106,20 @@ var main = function() {
     }
   };//buttonscript
   
+  // Add a master link to download all songs on the page at once
+  jQuery("#content-left h1").append('<div id="DownloadAllSongsButton" class="rect-arrow"><table class="arrow"><tr><td><div class="rect-arrow"></div></td></tr><tr><td class="' + triArrowString + '"></td></tr></table></div>');
+  jQuery("#DownloadAllSongsButton").click(function() {
+    jQuery(".DownloadSongButton").each(function() {
+      (function (btn) {
+        setTimeout(function() {
+	      var a = document.createElement('a');
+	      a.download = '';
+	      a.href = btn;
+	      a.dispatchEvent(new MouseEvent('click'));
+        }, 10);
+      })(jQuery(this).prop('href'));
+    });
+  });
   
   jQuery('ul.tools').on('click', '.DownloadSongButton', function() {
     console.log( "Downloading - " + jQuery(this)[0].download );
