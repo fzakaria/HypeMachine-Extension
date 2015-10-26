@@ -55,10 +55,27 @@ table {
 	border-top: 10px solid #494949;
 }
 
+#DownloadSelectAll,
+#DownloadSelectNone,
 #DownloadAllSongsButton {
-    display: inline-block;
-    background-color: #ffffff;
+    margin: 0 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#DownloadSelectAll:hover,
+#DownloadSelectNone:hover,
+#DownloadAllSongsButton:hover {
+    text-decoration: underline;
+}
+
+.DownloadSongButton input {
+    margin-top: 6px;
     position: relative;
-    left: 15px;
-    top: -10px;
+    top: 6px;
+}
+
+#DownloadAllSection {
+    font-size: 14px;
+    float: right;
 }
