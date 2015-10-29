@@ -95,7 +95,7 @@ var main = function() {
               download_button.href = download_url;
               download_button.className = "DownloadSongButton";
               download_button.download = artist + ' - ' + title + '.mp3';
-              download_button.innerHTML = '<table class="arrow"><tr><td><div class="rect-arrow"></div></td></tr><tr><td class="'+triArrowString+     '"></td></tr></table>';
+              download_button.innerHTML = '<table class="arrow"><tr><td rowspan="2"><input type="checkbox" /></td><td><div class="rect-arrow"></div></td></tr><tr><td class="'+triArrowString+     '"></td></tr></table>';
               jQuery(track).prepend('<li class="dl"><table class="spacer"></table>' + jQuery(download_button)[0].outerHTML + '</li>');
             });
             jQuery(track).data("hasDownloadButton", true);
@@ -106,6 +106,30 @@ var main = function() {
     }
   };//buttonscript
   
+  // Add a master link to download all songs on the page at once
+  jQuery("#submenu").append('<li id="DownloadAllSection">Select <span id="DownloadSelectAll">All</span>/<span id="DownloadSelectNone">None</span> &middot; <span id="DownloadAllSongsButton">Download</span></li>');
+  jQuery("#DownloadAllSongsButton").click(function() {
+    jQuery(".DownloadSongButton").each(function() {
+      if (jQuery(this).find("input[type='checkbox']:checked").length) {
+        (function (btn) {
+          setTimeout(function() {
+	        var a = document.createElement('a');
+	        a.download = '';
+	        a.href = btn;
+	        a.dispatchEvent(new MouseEvent('click'));
+          }, 10);
+        })(jQuery(this).prop('href'));
+      }
+    });
+  });
+  jQuery("#DownloadSelectAll").click(function(e) {
+    e.preventDefault();
+    jQuery(".DownloadSongButton input[type='checkbox']").prop('checked', true);
+  });
+  jQuery("#DownloadSelectNone").click(function(e) {
+    e.preventDefault();
+    jQuery(".DownloadSongButton input[type='checkbox']").prop('checked', false);    
+  });
   
   jQuery('ul.tools').on('click', '.DownloadSongButton', function() {
     console.log( "Downloading - " + jQuery(this)[0].download );

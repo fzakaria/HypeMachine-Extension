@@ -54,3 +54,28 @@ table {
 	border-right: 9px solid transparent;	
 	border-top: 10px solid #494949;
 }
+
+#DownloadSelectAll,
+#DownloadSelectNone,
+#DownloadAllSongsButton {
+    margin: 0 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#DownloadSelectAll:hover,
+#DownloadSelectNone:hover,
+#DownloadAllSongsButton:hover {
+    text-decoration: underline;
+}
+
+.DownloadSongButton input {
+    margin-top: 6px;
+    position: relative;
+    top: 6px;
+}
+
+#DownloadAllSection {
+    font-size: 14px;
+    float: right;
+}
